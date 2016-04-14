@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SNexus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="SNexus, Internet of things, Raspberry pi, 
+Sleep sensors, Sleep quality" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="css/main.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+<!---- start-smoth-scrolling---->
+<script type="text/javascript" src="js/move-top.js"></script>
+<script type="text/javascript" src="js/easing.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+</script>
+<script>
+$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+    options.url = 'http://52.26.51.149:3000/'+ options.url;
+});
+</script>
+</head>
+<body>
+<div class="container" id="mainContainer">
+<nav class="navbar navbar">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">SNexus</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="main.html">User Center</a></li>
+        <li><a href="dataCenter.html">Data Center</a></li>
+        <li><a href="reportCenter.html">Report Center</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">    
+        <li><a href="main.html"><span id="displayUsername"></span></a></li>
+        <li><button type="button" class="btn btn-default btn-lg" onclick="logOut()">Log out</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="personal">
+</div>
+</div>
+
+<script type="text/template" id="userCenterPersonalInfo-template"> 
+<div class="container">
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">Personal Information</div>
+      <div class="panel-body">
+          <div id="personalInfo">
+              <h5>Username: <%= username %></h5>
+              <h5>Firstname: <%= firstname %></h5>
+              <h5>Lastname: <%= lastname %></h5>
+              <h5>Gender: <%= gender %></h5>
+              <h5>Age: <%= age %></h5>
+              <h5>Register time: <%= date %></h5>
+		  <hr />
+		  <button type="button" class="btn btn-primary" id ='modifyPersonalInfo' >Modify</button>	  
+          </div>		  
+          <div id="personalInforModify" style="display:none" >
+          <label for="Firstname">Firstname:</label>
+          <input type="text" id="firstname" placeholder="Enter Firstname" value = <%= firstname %> >
+          <br>
+          <label for="Lasttname">Lastname:</label>
+          <input type="text" id="lastname" placeholder="Enter Lastname" value = <%= lastname %> >
+          <br>
+          <label for="Gender">Gender:</label>
+          <input type="radio" name="sex" class = "gender" value="male" checked> Male
+          <input type="radio" name="sex" class = "gender" value="female" > Female
+          <br>
+          <label for="Age">Age:</label>
+          <input type="number" id="age" placeholder="Enter Age" value = <%= age %> >
+		  <hr />
+		  <button type="button" class="btn btn-primary" id ='cancelModifyPersonalInfo' >Cancel</button>
+		  <button type="button" class="btn btn-primary" id ='saveModifyPersonalInfo' >Save</button>
+          </div>
+      
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Data Center overview</div>
+      <div class="panel-body">
+      <h5>You have the following data in our database</h5>
+      <ul>
+      <li>Light Sensor Data</li>
+      <p id = "lightOverview"></p>
+      <li>Sound Sensor Data</li>
+      <p id = "soundOverview"></p>
+      <li>Motion Sensor Data</li>
+      <p id = "motionOverview"></p>
+      </ul>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Report overview</div>
+      <p id = "reportOverview"></p>
+    </div>
+  </div>
+</div>
+</script>
+<div class="footer">
+    <div class="container">
+        <div class="footer-main">
+            <p>&copy 2015 SNexus by<a href="http://w3layouts.com/"> Chao Guo, Hengxin Cui, Lei Xu, Tao Tang and Yixin Wu</a></p>
+            <ul>
+                <li><a href="#"><span class="fb"> </span></a></li>
+                <li><a href="#"><span class="twt"> </span></a></li>
+                <li><a href="#"><span class="p"> </span></a></li>
+                <li><a href="#"><span class="d"> </span></a></li>
+            </ul>
+        </div>
+    </div>
+     <script type="text/javascript">
+         $(document).ready(function() {				
+             $().UItoTop({ easingType: 'easeOutQuart' });				
+         });
+     </script>
+    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+</div>
+<script type="text/javascript" src="app/cookie.js"></script>
+<script type="text/javascript" src="app/models/dataOverview.js"></script>
+<script type="text/javascript" src="app/models/UserProfile.js"></script>
+<script type="text/javascript" src="app/views/PersonalInfo.js"></script>
+<script type="text/javascript" src="app/userCenterApp.js"></script>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SNexus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="SNexus, Internet of things, Raspberry pi, 
+Sleep sensors, Sleep quality" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="css/main.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic" rel="stylesheet" type="text/css">
+<!---- start-smoth-scrolling---->
+<script type="text/javascript" src="js/move-top.js"></script>
+<script type="text/javascript" src="js/easing.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+</script>
+<script>
+$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+    options.url = 'http://52.26.51.149:3000/'+ options.url;
+});
+</script>
+
+<!--start-smoth-scrolling-->
+</head>
+<body>
+<!--start-banner-->
+<div id="loginAndRegisterForm"></div>
+<script type="text/template" id="login-register-template">
+	<div class="banner" id="home">
+		<div class="container">
+			<div class="header">
+			<div class="logo">
+				<a href="index.html"><img src="images/logo.png" alt=""></a>
+			</div>
+			<div class="navigation">
+				 <span class="menu"></span> 
+					<ul class="navig">
+						<li><a href="index.html" class="scroll active">Home</a></li>
+						<li><a href="#about" class="scroll">Tech</a></li>
+                        <li><a href="#products" class="scroll">Products</a></li>
+                        <li><a href="#pricing" class="scroll">Features</a></li>
+						<li><a href="#testimonials" class="scroll">About Us</a></li>
+                        <li id="loginBtn"><button type="button" class="btn btn-primary btn-lg">Login</button></li>
+						<li id="loginDiv"><a href="main.html" id="displayUsername"><span class="glyphicon glyphicon-user"></span></a></li>
+        <li><button type="button" class="btn btn-default btn-lg" id="logOutBtn">Log out</button></li>
+					</ul>
+			</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="banner-btm">
+				<div  id="top" class="callbacks_container">
+			      	<ul class="rslides" id="slider4">
+			        	<li>
+							<div class="banner-bottom">
+								<h1>We learn your sleep</h1>
+								<p>Develop an IoT cloud analytics product that collects real-time streaming data.</p>
+							</div>
+						</li>
+						<li>
+							<div class="banner-bottom">
+								<h1>We study your sleep</h1>
+								<p>Develop rigorous algorithms that aggregate and analyze sleeping environmental data.</p>
+							</div>
+						</li>
+						<li>
+							<div class="banner-bottom">
+								<h1>We present your sleep</h1>
+								<p>Develop an user-friendly applictaion that visualizes processed environmental data. </p>
+							</div>
+						</li>
+			      	</ul>
+			    </div>
+			  <div class="clearfix"> </div>
+			</div>
+			</div>
+		</div>
+<!-- script-for-login modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">    
+      <div class="modal-content" id="loginForm">
+        <div class="modal-header" style="padding:35px 50px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <div role="form">
+            <div class="form-group">
+              <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
+              <input type="text" class="form-control" id="usrname" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+              <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+              <input type="password" class="form-control" id="psw" placeholder="Enter password">
+            </div>
+            <div class="checkbox">
+              <label><input type="checkbox" value="" checked>Remember me</label>
+            </div>
+              <button class="btn btn-primary btn-block" id = "submitForLogin"><span class="glyphicon glyphicon-off"></span> Login</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+          <p>Not a member? <a href="#" id = "signUp">Sign Up</a></p>
+          <p>Forgot <a href="#">Password?</a></p>
+          <p>Forgot <a href="#">Username?</a></p>
+        </div>
+      </div>
+
+      <div class="modal-content" id="registerForm">
+        <div class="modal-header" style="padding:35px 50px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4><span class="glyphicon glyphicon-lock"></span> Register</h4>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <div role="form">
+            <div class="form-group">
+              <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
+              <input type="text" class="form-control" id="usrname" placeholder="Enter username" 
+              title="Username can only be numbers, characters, -, _. No space please ! .">
+              <span id = "usernameError"></span>
+            </div>
+            <div class="form-group">
+              <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+              <input type="password" class="form-control" id="psw" placeholder="Enter password"
+              title="Enter a combination of at least six numbers, letters and punctuation marks!">
+              <span id = "pswError"></span>
+            </div>
+            <div class="form-group">
+              <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Re-Password</label>
+              <input type="password" class="form-control" id="rePsw" placeholder="Enter password">
+              <span id = "rePswError"></span>
+            </div>
+            <div class="form-group">
+              <label for="email"><span class="glyphicon glyphicon-envelope"></span> E-mail</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter E-mail"
+              title="Please input a validate E-mail! E-mail is used for find back password and username">
+              <span id = "emailError"></span>
+            </div>
+              <button class="btn btn-primary btn-block" id = "submitForRegister" ><span class="glyphicon glyphicon-off" ></span> Register</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+          <p>Already a member? <a href="#" id ="login">Login</a></p>
+        </div>
+      </div>
+    </div>
+  </div> 
+			
+</script>
+	<!-- script-for-menu -->
+		 <script>
+				$("span.menu").click(function(){
+					$(" ul.navig").slideToggle("slow" , function(){
+					});
+				});
+		 </script>
+		 <!-- script-for-menu -->
+		 <!--Slider-Starts-Here-->
+				<script src="js/responsiveslides.min.js"></script>
+			 <script>
+			    // You can also use "$(window).load(function() {"
+			    $(function () {
+			      // Slideshow 4
+			      $("#slider4").responsiveSlides({
+			        auto: true,
+			        pager: true,
+			        nav: true,
+			        speed: 500,
+			        namespace: "callbacks",
+			        before: function () {
+			          $('.events').append("<li>before event fired.</li>");
+			        },
+			        after: function () {
+			          $('.events').append("<li>after event fired.</li>");
+			        }
+			      });
+			
+			    });
+			  </script>
+			<!--End-slider-script-->	
+	<!--end-banner-->
+	<!--start-about-->
+	<div class="about" id="about">
+		<div class="container">
+			<div class="about-main">
+				<img src="images/abt-1.png" alt="" />
+				<h3>Technical Specs</h3>
+				<p>Our product includes three components: data collection, data analysis, data presentation</p>
+			</div>
+			<div class="about-bottom">
+			<div class="abt-one">
+				<div class="col-md-4 about-left active">
+					<div class="abt-one">
+						<div class="abt-left">
+							<span class="hnd active"> </span>
+						</div>
+						<div class="abt-right">
+							<h4>Data Collection</h4>
+							<p>Raspberry-pi in connection with external sensors used Python to collect data and then uploaded to MongoDB.</p>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="col-md-4 about-left">
+					<div class="abt-one">
+						<div class="abt-left">
+							<span class="d"> </span>
+						</div>
+						<div class="abt-right">
+							<h4>Data analysis</h4>
+							<p>User's raw data is analyzed by algorithms in Microsoft Excel to evaluate the user's sleeping environment. JavaScript will run daily algorithms on servers.</p>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="col-md-4 about-left">
+					<div class="abt-one">
+						<div class="abt-left">
+							<span class="ar"> </span>
+						</div>
+						<div class="abt-right">
+							<h4>Data Presentation</h4>
+							<p>On the server's end, used node.js, express.js and MongoDB to build Restful APIs. On the client's end, used backbone.js and char.js to present the data to users. Used jQueryUI and bootstrap framework to design UI.</p>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end-about-->
+	<!--start-special-->
+	<div class="special" id="features">
+		<div class="container">
+			<div class="special-bottom" id="products">
+				</span><img src="images/spl.png" alt="" />
+				<h3>Product prototype presentation</h3>
+			</div>	
+				<div class="special-btm">
+					<div class="portfolios entertain_box  wow fadeInUp" data-wow-delay="0.4s" id="portfolio">
+			<div class="portfolio-top">
+			<ul id="filters" class="clearfix">
+						<li><span class="filter active" data-filter="app card icon logo web">ALL</span></li>
+						<li><span class="filter" data-filter="app">Hardware</span></li>
+						<li><span class="filter" data-filter="photo">Analysis</span></li>
+						<li><span class="filter" data-filter="card">WEB</span></li>
+					</ul>
+					<div id="portfoliolist">
+					<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="images/p-1.jpg" class="b-link-stripe b-animate-go   swipebox"  title="Image Title">
+						     <img src="images/port-1.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 ">Product working demo</h2>
+						  	 </div></a>
+		                </div>
+					</div>				
+					<div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="images/p-2.jpg" class="b-link-stripe b-animate-go   swipebox"  title="Image Title">
+						     <img src="images/port-2.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 ">User Center demo</h2>
+						  	 </div></a>
+		               </div>
+					</div>		
+					<div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="images/p-3.jpg" class="b-link-stripe b-animate-go   swipebox"  title="Image Title">
+						     <img src="images/port-3.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 ">Data analyzing</h2>
+						  	 </div></a>
+		                </div>
+					</div>				
+					<div class="portfolio card mix_all" data-cat="card" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="images/p-4-3.jpg" class="b-link-stripe b-animate-go   swipebox"  title="Image Title">
+						     <img src="images/port-4-3.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 ">Present data into charts</h2>
+						  	 </div></a>
+		                </div>
+					</div>	
+					<div class="portfolio photo mix_all" data-cat="photo" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="images/p-5-2.jpg" class="b-link-stripe b-animate-go   swipebox"  title="Image Title">
+						     <img src="images/port-5-2.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 ">Data analysis charts </h2>
+						  	 </div></a>
+		                </div> 
+					</div>			
+					<div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+						<div class="portfolio-wrapper">		
+							<a href="images/p-6.jpg" class="b-link-stripe b-animate-go  swipebox"  title="Image Title">
+						     <img src="images/port-6.jpg" /><div class="b-wrapper"><h2 class="b-animate b-from-left    b-delay03 ">Product interface demo</h2>
+						  	 </div></a>
+		                </div>
+		                
+					</div>		
+			</div>
+		</div>
+		</div>
+				</div>
+			</div>
+		</div>
+	<!--end-special-->
+	<link rel="stylesheet" href="css/swipebox.css">
+	<script src="js/jquery.swipebox.min.js"></script> 
+	    <script type="text/javascript">
+			jQuery(function($) {
+				$(".swipebox").swipebox();
+			});
+		</script>
+	<!-- Portfolio Ends Here -->
+	<script type="text/javascript" src="js/jquery.mixitup.min.js"></script>
+<script type="text/javascript">
+$(function () {
+	
+	var filterList = {
+	
+		init: function () {
+		$('#portfoliolist').mixitup({
+			targetSelector: '.portfolio',
+			filterSelector: '.filter',
+			effects: ['fade'],
+			easing: 'snap',
+			// call the hover effect
+			onMixEnd: filterList.hoverEffect()
+		});				
+	
+	},
+	
+	hoverEffect: function () {
+		$('#portfoliolist .portfolio').hover(
+			function () {
+				$(this).find('.label').stop().animate({bottom: 0}, 200, 'easeOutQuad');
+				$(this).find('img').stop().animate({top: -30}, 500, 'easeOutQuad');				
+			},
+			function () {
+				$(this).find('.label').stop().animate({bottom: -40}, 200, 'easeInQuad');
+				$(this).find('img').stop().animate({top: 0}, 300, 'easeOutQuad');								
+			}		
+		);				
+	
+	}
+
+};
+
+// Run the show!
+	filterList.init();
+	
+});	
+</script>
+
+	<!--start-pricing-->
+	<div class="pricing" id="pricing">
+		<div class="container">
+			<div class="pricing-top">
+				<img src="images/price-1.png" alt="" />
+				<h3>What is Unique about SNexus</h3>
+			</div>
+			<div class="about-bottom">
+				<div class="abt">
+					<div class="col-md-4 about-left active">
+						<div class="abt-one">
+							<div class="abt-left">
+								<span class="hnd active"> </span>
+							</div>
+							<div class="abt-right">
+								<h4>More Valuable</h4>
+								<p>By gathering data from our direct users and cooperation with hospitals and research institutions,
+									we will have a large amount of first hand data. Then we will provide various type of data service based on the requirements from our customers.</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<div class="col-md-4 about-left">
+						<div class="abt-one">
+							<div class="abt-left">
+								<span class="d"> </span>
+							</div>
+							<div class="abt-right">
+								<h4>More Reliable</h4>
+								<p>Our device could track multiple factors, such as motion, sound, light, temperature and humidity, helping us have a better understanding of
+									the person’s sleeping status in a more reliable and comprehensive way.</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<div class="col-md-4 about-left">
+						<div class="abt-one">
+							<div class="abt-left">
+								<span class="ar"> </span>
+							</div>
+							<div class="abt-right">
+								<h4>More Convenient</h4>
+								<p>Our device has one fixed stand and one ring. The stand could track sound, light,
+									temperature and humidity and the ring will track the sleeper’s motions. This combination is convenient enough to wear comparing with both
+									the medical level appliance and the watch or band.</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!--end-pricing-->
+	<!--start-testimonials-->
+	<div class="test" id="testimonials">
+		<div class="container">
+			<div class="test-top">
+				<img src="images/test-1.png" alt="" />
+				<h3>We are a creative and innovative team</h3>
+			</div>
+			<div class="test-bottom">
+				<div class="col-md-4 test-bottom-left">
+					<div class="test-left">
+						<p>Full stack engineer, proficient in Javascript, Java and Python;
+Hands-on experience with RESTful web service, MEAN stack and LAMP stack. In this peoject, my part is focus on the website part. For server side, I use node.js, express.js and MongoDB to build Restful APIs. For client side, I use backbone.js and char.js to present the data to users. Using jQueryUI and bootstrap framework to design UI..</p>
+						<div class="test-btm">
+							<div class="test-1">
+								<img src="images/Chao.png" alt="" />
+							</div>
+							<div class="test-2">
+								<h4>Chao Guo</h4>
+								<label>Full stack engineer</label>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 test-bottom-left">
+					<div class="test-left">
+						<p>As the project leader, I Divided the project into small tasks, assigned tasks to members based on their skillsets;
+							Coordinated team members, concluding decisions on the scale of our project, features/functions in our product, and technologies we need to use.
+							Also, I designed the circuit diagram and connected sensors working well, used python to script them successfully collecting data and sending them to database.
+						</p>
+						<div class="test-btm">
+							<div class="test-1">
+								<img src="images/Lei.png" alt="" />
+							</div>
+							<div class="test-2">
+								<h4>Lei Xu</h4>
+								<label>Project leader, Full stack engineer</label>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 test-bottom-left">
+					<div class="test-left">
+						<p>Pursing Master’s Degree in Information System at Santa Clara University with the concentration in marketing analytics modelling,
+							and data analysis. Experienced in supply chain management and mechanical engineering. In this project, I analyzed business model;
+							integrated Raspberry pi with 3-axis Acceleration Meter
+							Tested and captured raw motion data of sleeping
+							Processed motion data and performed data visualization</p>
+						<div class="test-btm">
+							<div class="test-1">
+								<img src="images/hengxin.png" alt="" />
+							</div>
+							<div class="test-2">
+								<h4>Hengxin Cui</h4>
+								<label>Business analyst</label>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 test-bottom-left">
+					<div class="test-left">
+						<p>
+							Experienced Amazon Web Services professional; manage and improve cloud environments on Amazon Web Services infrastructure;
+							maximum utilization of AWS components for ultimate scalability, durability, and performance.</p>
+						<div class="test-btm">
+							<div class="test-1">
+								<img src="images/tao.png" alt="" />
+							</div>
+							<div class="test-2">
+								<h4>Tao Tang</h4>
+								<label>Customer technical support engineer<br> in cloud computing.</label>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+                <div class="col-md-4 test-bottom-left">
+					<div class="test-left">
+						<p>Quality assurance engineer, have experience in designing test plans and creating test cases to verify software new feature,
+							functions and performance. Be familiar with the development of web application integrated HTML/CSS, JavaScript and PHP.
+							In this project, I am in responsible of the UI design implementing Bootstrap framework. Using Photoshop to design the logo of the website.</p>
+						<div class="test-btm">
+							<div class="test-1">
+								<img src="images/yixin.png" alt="" />
+							</div>
+							<div class="test-2">
+								<h4>Yixin Wu</h4>
+								<label>Quality assurance engineer</label>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--end-testimonials-->
+	<!---pop-up-box---->
+					  <script type="text/javascript" src="js/modernizr.custom.min.js"></script>    
+					<link href="css/popup-box.css" rel="stylesheet" type="text/css" media="all"/>
+					<script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
+					<!---//pop-up-box---->
+				<div id="small-dialog" class="mfp-hide">
+						<div class="login">
+							<h3>Create Account</h3>
+							<input type="text"  placeholder="Name" requird=""/>
+							<input type="text" placeholder="Email" requird="" />
+							<input type="password" placeholder="Password" requird=""/>
+							<input type="password" placeholder="Conform Password" requird=""/>
+							<input type="submit" value="Sign Up" />
+							<div class="lgn">
+								<h3>Login</h3>
+							<input type="text" placeholder="Email" requird="" />
+							<input type="password" placeholder="Password" requird="" />
+							<div class="ln-btn">
+								<input type="submit" value="Login" />
+							</div>
+							</div>
+						</div>
+					</div>
+				 <script>
+						$(document).ready(function() {
+						$('.popup-with-zoom-anim').magnificPopup({
+							type: 'inline',
+							fixedContentPos: false,
+							fixedBgPos: true,
+							overflowY: 'auto',
+							closeBtnInside: true,
+							preloader: false,
+							midClick: true,
+							removalDelay: 300,
+							mainClass: 'my-mfp-zoom-in'
+						});
+																						
+						});
+				</script>					
+		<!--End-pop-up-box-->
+	<!--start-footer-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-main">
+				<p>&copy 2015 SNexus by<a href="http://w3layouts.com/"> Chao Guo, Hengxin Cui, Lei Xu, Tao Tang and Yixin Wu</a></p>
+				<ul>
+					<li><a href="#"><span class="fb"> </span></a></li>
+					<li><a href="#"><span class="twt"> </span></a></li>
+					<li><a href="#"><span class="p"> </span></a></li>
+					<li><a href="#"><span class="d"> </span></a></li>
+				</ul>
+			</div>
+		</div>
+		 <script type="text/javascript">
+									$(document).ready(function() {
+										$().UItoTop({ easingType: 'easeOutQuart' });
+									});
+								</script>
+		<a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+	</div>
+	<!--end-footer-->
+    
+    
+<script type="text/javascript" src="app/cookie.js"></script>
+<script type="text/javascript" src="app/models/UserLogin.js"></script>
+<script type="text/javascript" src="app/models/CheckUsername.js"></script>
+<script type="text/javascript" src="app/models/userRegister.js"></script>
+<script type="text/javascript" src="app/models/CheckEmail.js"></script>
+<script type="text/javascript" src="app/views/LoginAndRegister.js"></script>
+<script type="text/javascript" src="app/indexApp.js"></script>
+    
+</body>
+</html>
